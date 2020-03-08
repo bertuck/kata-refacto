@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class TemplateManager
+ */
 class TemplateManager
 {
     /**
@@ -23,7 +26,7 @@ class TemplateManager
     {
         try {
             if (!$template) {
-                throw new \RuntimeException('no tpl given');
+                throw new \RuntimeException('TemplateManager : No template given.');
             }
             return $this->computeTexts($template, $data);
         } catch (RuntimeException $e) {
@@ -51,7 +54,6 @@ class TemplateManager
     /**
      * @param string $text
      * @param array $data
-     * @return string
      */
     private function computeText(string &$text, array $data)
     {
@@ -61,6 +63,5 @@ class TemplateManager
             $tokenObj = new $tokenClass($token);
             $text = $tokenObj->replace($text, $this->context);
         }
-        return $text;
     }
 }
