@@ -2,23 +2,53 @@
 
 class TemplateManager
 {
-    public function getTemplateComputed(Template $tpl, array $data)
+    /**
+     * @var ApplicationContext
+     */
+    protected $context;
+
+    /**
+     * TemplateManager constructor.
+     */
+    public function __construct() {
+        $this->context = ApplicationContext::getInstance();
+    }
+
+    /**
+     * @param Template $template
+     * @param array $data
+     * @return Template
+     */
+    public function getTemplateComputed(Template $template, array $data) : Template
     {
-        if (!$tpl) {
+        if (!$template) {
             throw new \RuntimeException('no tpl given');
         }
+        return $this->computeTexts($template, $data);
+    }
 
-        $replaced = clone($tpl);
-        $replaced->subject = $this->computeText($replaced->subject, $data);
-        $replaced->content = $this->computeText($replaced->content, $data);
-
+    /**
+     * @param Template $template
+     * @param array $data
+     * @return Template
+     */
+    private function computeTexts(Template $template, array $data) : Template
+    {
+        $replaced = clone($template);
+        foreach ($replaced as $key => $text) {
+            if ($key !== 'id') {
+                $this->computeText($replaced->{$key}, $data);
+            }
+        }
         return $replaced;
     }
 
-    private function computeText($text, array $data)
+    /**
+     * @param string $text
+     * @param array $data
+     */
+    private function computeText(string &$text, array $data)
     {
-        $APPLICATION_CONTEXT = ApplicationContext::getInstance();
-
         $quote = (isset($data['quote']) and $data['quote'] instanceof Quote) ? $data['quote'] : null;
 
         if ($quote)
@@ -63,11 +93,9 @@ class TemplateManager
          * USER
          * [user:*]
          */
-        $_user  = (isset($data['user'])  and ($data['user']  instanceof User))  ? $data['user']  : $APPLICATION_CONTEXT->getCurrentUser();
+        $_user  = (isset($data['user'])  and ($data['user']  instanceof User))  ? $data['user']  : $this->context->getCurrentUser();
         if($_user) {
             (strpos($text, '[user:first_name]') !== false) and $text = str_replace('[user:first_name]'       , ucfirst(mb_strtolower($_user->firstname)), $text);
         }
-
-        return $text;
     }
 }
