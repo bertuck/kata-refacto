@@ -1,14 +1,30 @@
 <?php
 
-class Template
+/**
+ * Class Template
+ */
+class Template extends Entity
 {
-    public $id;
+    /**
+     * @var string
+     */
     public $subject;
+
+    /**
+     * @var string
+     */
     public $content;
 
-    public function __construct($id, $subject, $content)
+    /**
+     * Template constructor.
+     * @param int $id
+     * @param string $subject
+     * @param string $content
+     */
+    public function __construct(int $id, string $subject, string $content)
     {
         $this->id = $id;
+        $this->type = 'template';
         $this->subject = $subject;
         $this->content = $content;
     }

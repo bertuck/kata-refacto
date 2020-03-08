@@ -1,13 +1,32 @@
 <?php
 
-class Site
+/**
+ * Class Site
+ */
+class Site extends Entity
 {
-    public $id;
-    public $url;
+    /**
+     * @var string
+     */
+    protected $url;
 
-    public function __construct($id, $url)
+    /**
+     * Site constructor.
+     * @param int $id
+     * @param string $url
+     */
+    public function __construct(int $id, string $url)
     {
         $this->id = $id;
+        $this->type = 'site';
         $this->url = $url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl() : string
+    {
+        return $this->url;
     }
 }
