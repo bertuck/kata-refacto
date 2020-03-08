@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class SiteRepository
+ */
 class SiteRepository implements Repository
 {
     use SingletonTrait;
@@ -13,7 +16,7 @@ class SiteRepository implements Repository
     public function __construct()
     {
         // DO NOT MODIFY THIS METHOD
-        $this->url = Faker\Factory::create()->url;
+        $this->url = \Faker\Factory::create()->url;
     }
 
     /**
@@ -21,7 +24,7 @@ class SiteRepository implements Repository
      *
      * @return Site
      */
-    public function getById($id)
+    public function getById($id) : Site
     {
         // DO NOT MODIFY THIS METHOD
         return new Site($id, $this->url);
