@@ -1,7 +1,16 @@
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
-
+require_once __DIR__ . '/../src/Tools/Tools.php';
+require_once __DIR__ . '/../src/Token/Token.php';
+require_once __DIR__ . '/../src/Token/DestinationLink.php';
+require_once __DIR__ . '/../src/Token/DestinationName.php';
+require_once __DIR__ . '/../src/Token/FirstName.php';
+require_once __DIR__ . '/../src/Token/LastName.php';
+require_once __DIR__ . '/../src/Token/Email.php';
+require_once __DIR__ . '/../src/Token/Summary.php';
+require_once __DIR__ . '/../src/Token/SummaryHtml.php';
+require_once __DIR__ . '/../src/Entity/Entity.php';
 require_once __DIR__ . '/../src/Entity/Destination.php';
 require_once __DIR__ . '/../src/Entity/Quote.php';
 require_once __DIR__ . '/../src/Entity/Site.php';
@@ -21,9 +30,15 @@ $template = new Template(
     1,
     'Votre voyage avec une agence locale [quote:destination_name]',
     "
-Bonjour [user:first_name],
+Bonjour [user:first_name] [user:last_name],
 
 Merci d'avoir contacté un agent local pour votre voyage [quote:destination_name].
+
+Voici le lien pour visualiser vôtre voyage : [quote:destination_link].
+
+Vous receverez un mail prochainement sur [user:email].
+
+Reference: [quote:summary].
 
 Bien cordialement,
 
@@ -35,7 +50,9 @@ $templateManager = new TemplateManager();
 $message = $templateManager->getTemplateComputed(
     $template,
     [
-        'quote' => new Quote($faker->randomNumber(), $faker->randomNumber(), $faker->randomNumber(), $faker->date())
+        'quote' => new Quote($faker->randomNumber(), $faker->randomNumber(), $faker->randomNumber(), $faker->dateTimeBetween()),
+        'user' => new User($faker->randomNumber(), 'Kenni', 'Bertucat', 'test@mail.fr'),
+        'site' => new Site($faker->randomNumber(), $faker->url)
     ]
 );
 
